@@ -14,20 +14,23 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return View
      */
-    public function index(): Response
+    public function index(Request $request)
     {
         $users = User::all();
+        if($request->has('search')){
+            $users = User::where('username', 'like', "%{$request->search}%")->orWhere('email', 'like', "%{$request->search}%")->get();
+        }
         return view('users.index', compact('users'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
-    public function create(): Response
+    public function create()
     {
         return view('users.create');
     }
